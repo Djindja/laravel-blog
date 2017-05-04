@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Session;
 use App\Category;
 use Illuminate\Http\Request;
 
@@ -35,6 +36,18 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         // asev a new category and redirect back to index
+        $this->validate($request, array(
+                'name' => 'required|max:255'
+        ));
+
+        $category = new Category;
+
+        $category->name = $request->name;
+        $category->save();
+
+        Session::flash('success', 'New Category has been created');
+
+        return redirect()->route('categories.index');
     }
 
     /**
